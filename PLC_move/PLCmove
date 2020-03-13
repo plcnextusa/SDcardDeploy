@@ -1,0 +1,1 @@
+@reboot /opt/plcnext/MassDeploy.sh | tee -a /opt/plcnext/logs/PLCmove.log
