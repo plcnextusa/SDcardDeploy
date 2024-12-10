@@ -14,6 +14,11 @@ if [ "$version" -ge 2400000 ]; then
         "1: SD Card activated after reset")
             echo "SD card will be active after reset"
             touch /opt/plcnext/.reactive.txt
+	    if  [ ! -f /etc/device_data/boot_settings/sd_reactivation ]; then
+	      touch /etc/device_data/boot_settings/sd_reactivation
+	      chown plcnext_firmware /etc/device_data/boot_settings/sd_reactivation
+	      chmod 664 /etc/device_data/boot_settings/sd_reactivation
+	    fi
             break
             ;;
         "2: SD Card retains current setting after reset")
