@@ -29,6 +29,7 @@ function removeFiles() {
     rm -r /var/spool/cron/root
   fi
   rm -r /opt/plcnext/.fwVersion.txt
+  rm -r /opt/plcnext/.reactive.txt
   rm -r /opt/plcnext/MassDeploy.sh
   rm -r /opt/plcnext/install.sh
   rm -r /opt/plcnext/PLC_move
@@ -37,6 +38,14 @@ function removeFiles() {
     rm -r /opt/plcnext/*.raucb
   fi
   echo "Script files removed. PLC has succesfully been copied."
+}
+
+function reEnableSD() {
+  if [ -f /opt/plcnext/.reactive.txt ]; then
+    touch /etc/device_data/boot_settings/sd_reactivation
+    chown plcnext_firmware /etc/device_data/boot_settings/sd_reactivation
+    chmod 664 /etc/device_data/boot_settings/sd_reactivation
+  fi
 }
 
 sleep 45
@@ -50,6 +59,7 @@ fi
 
 if [ "$sdState" = "activated" ]; then
   fileTransfer
+  reEnableSD
   exit 0
 else
   removeFiles

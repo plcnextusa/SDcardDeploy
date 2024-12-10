@@ -2,6 +2,32 @@
 
 export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/plcnext/appshome/bin
 
+versionString=$(grep Arpversion /etc/plcnext/arpversion)
+version="${versionString//[^0-9]/}"
+
+if [ "$version" -ge 2400000 ]; then
+  PS3='Please enter your choice: '
+  options=("1: SD Card activated after reset" "2: SD Card retains current setting after reset" "Quit")
+  select opt in "${options[@]}"
+  do
+    case $opt in
+        "1: SD Card activated after reset")
+            echo "SD card will be active after reset"
+            touch /opt/plcnext/.reactive.txt
+            break
+            ;;
+        "2: SD Card retains current setting after reset")
+            echo "You chose Option 2"
+            break
+            ;;
+        "Quit")
+            exit
+            ;;
+        *) echo "Invalid option $REPLY";;
+    esac
+  done
+fi
+
 #Check for new update
 if [ -d /opt/plcnext/PLC_move ]; then
 	mv /opt/plcnext/*.raucb /opt/plcnext/PLC_move/
